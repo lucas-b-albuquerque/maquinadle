@@ -2,201 +2,316 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Maquinadle</title>
     <style>
         :root {
-            --bg: #121213; --card: #1e1e1e; --text: #ffffff;
-            --green: #4caf50; --yellow: #ffeb3b; --orange: #ff9800; --red: #f44336;
+            --bg: #121213; --bg-card: #1e1e1e; --bg-row: #1a1a1b; --text: #ffffff;
+            --gold: #fbc02d; --gold-hover: #f9a825; --border: #333;
+            --green: #4caf50; --red: #f44336; --orange: #ff9800; --yellow: #ffeb3b;
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg); color: var(--text);
-            margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center;
+            margin: 0; padding: 15px; display: flex; justify-content: center;
         }
-        .container { max-width: 500px; width: 100%; }
-        .header { text-align: center; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px;}
-        .header h1 { margin: 0; letter-spacing: 2px; }
-        .machine-card {
-            background-color: var(--card); border-radius: 10px; padding: 15px; margin-bottom: 20px;
-        }
-        .machine-card img { width: 100%; border-radius: 5px; margin-top: 10px; }
-        .specs { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
-        .specs h2 { margin: 0; font-size: 1.2rem; color: #aaa; }
-        .ano { font-size: 1.5rem; font-weight: bold; color: var(--yellow); }
+        .container { max-width: 450px; width: 100%; }
         
-        .guesses { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
-        .guess-row {
-            display: flex; justify-content: space-between; align-items: center;
-            background: #222; padding: 12px; border-radius: 5px; border: 1px solid #444; font-weight: bold;
+        /* Header */
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 20px; }
+        .header h1 { margin: 0; font-size: 1.5rem; letter-spacing: 1px; font-weight: 800; }
+        .header h1 span { color: var(--gold); }
+        .stats-icons { display: flex; gap: 10px; color: #888; font-size: 1.2rem; }
+        
+        /* Machine Card */
+        .card { background-color: var(--bg-card); border-radius: 8px; padding: 15px; margin-bottom: 20px; border: 1px solid var(--border); }
+        .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .brand { font-size: 0.8rem; font-weight: bold; color: var(--orange); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .model { font-size: 1.3rem; font-weight: bold; margin: 0; }
+        .detail { font-size: 0.75rem; color: #aaa; text-transform: uppercase; margin-top: 3px; }
+        .year-box { text-align: right; }
+        .year-label { font-size: 0.7rem; color: #888; font-weight: bold; letter-spacing: 1px; }
+        .year-val { font-size: 1.5rem; font-weight: bold; color: var(--gold); margin: 0; }
+        .img-container { width: 100%; border-radius: 6px; overflow: hidden; background: #000; display: flex; justify-content: center; }
+        .img-container img { width: 100%; height: auto; display: block; }
+        
+        /* Guesses Area */
+        .guesses { display: flex; flex-direction: column; gap: 8px; }
+        .row { display: flex; justify-content: space-between; align-items: center; background: var(--bg-row); padding: 12px 15px; border-radius: 6px; border: 1px solid var(--border); height: 30px; font-weight: bold;}
+        .row.active { border-color: var(--gold); box-shadow: 0 0 5px rgba(251, 192, 45, 0.2); }
+        .row-num { color: #666; font-size: 0.9rem; width: 30px; }
+        
+        /* Active Input Form */
+        .input-wrapper { display: flex; flex: 1; align-items: center; justify-content: space-between; }
+        .input-prefix { color: #888; margin-right: 5px; }
+        .guess-input {
+            background: transparent; border: none; color: white; font-size: 1.1rem; font-weight: bold; width: 100%; outline: none;
         }
-        .input-area { display: flex; gap: 10px; margin-bottom: 20px; }
-        .input-area input {
-            flex: 1; padding: 15px; font-size: 1.2rem; border-radius: 5px; border: none;
-            background: #333; color: white; font-weight: bold; text-align: center;
+        .submit-btn {
+            background: var(--gold); color: #000; border: none; border-radius: 4px; width: 40px; height: 35px;
+            font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold;
         }
-        .input-area button {
-            padding: 15px 25px; font-size: 1.1rem; border: none; border-radius: 5px;
-            background: var(--green); color: white; cursor: pointer; font-weight: bold;
-        }
-        .result-panel { text-align: center; background: var(--card); padding: 20px; border-radius: 10px; display: none; }
+        .submit-btn:active { background: var(--gold-hover); }
+
+        /* Filled Row (Past Guess) */
+        .row-val { font-size: 1.1rem; color: white; flex: 1; text-align: left; margin-left: 10px; }
+        .row-hint { font-size: 0.85rem; border-radius: 4px; padding: 4px 10px; border: 1px solid var(--border); display: flex; align-items: center; gap: 5px; }
+        
+        /* Hint Colors */
+        .c-red { color: #ffbaba; border-color: var(--red); background: rgba(244, 67, 54, 0.2); }
+        .c-orange { color: #ffe0b2; border-color: var(--orange); background: rgba(255, 152, 0, 0.2); }
+        .c-yellow { color: #fff9c4; border-color: var(--yellow); background: rgba(255, 235, 59, 0.2); }
+        .c-green { color: #c8e6c9; border-color: var(--green); background: rgba(76, 175, 80, 0.2); }
+
+        /* End Game Panel */
+        .end-panel { margin-top: 20px; background: var(--bg-card); padding: 20px; border-radius: 8px; border: 1px solid var(--border); text-align: center; display: none; }
+        .end-title { font-size: 1.5rem; font-weight: bold; margin: 0 0 10px 0; }
+        .end-price { font-size: 2rem; color: var(--gold); font-weight: bold; margin: 10px 0; }
         .share-btn {
-            background: #333; color: white; padding: 10px 20px; border: none; border-radius: 5px;
-            cursor: pointer; margin-top: 15px; font-size: 1rem;
+            background: #333; color: white; border: 1px solid #555; border-radius: 6px; padding: 12px 20px; font-size: 1rem; cursor: pointer; font-weight: bold; margin-top: 15px; width: 100%; display: flex; justify-content: center; align-items: center; gap: 10px;
         }
-        /* Dinamic Colors */
-        .c-green { color: var(--green); border-color: var(--green); }
-        .c-yellow { color: var(--yellow); border-color: var(--yellow); }
-        .c-orange { color: var(--orange); border-color: var(--orange); }
-        .c-red { color: var(--red); border-color: var(--red); }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <h1>MAQUINADLE</h1>
+        <h1>MAQUINA<span>DLE</span></h1>
+        <div class="stats-icons">📅 🏆</div>
     </div>
 
-    <div class="machine-card">
-        <div class="specs">
+    <div class="card">
+        <div class="card-top">
             <div>
-                <span style="color: #ff9800; font-weight: bold;" id="categoria"></span>
-                <h2 id="nome-maquina"></h2>
-                <small id="detalhe" style="color: #888;"></small>
+                <div class="brand" id="brand"></div>
+                <h2 class="model" id="model"></h2>
+                <div class="detail" id="detail"></div>
             </div>
-            <div class="ano" id="ano-maquina"></div>
+            <div class="year-box">
+                <div class="year-label">ANO</div>
+                <h3 class="year-val" id="year"></h3>
+            </div>
         </div>
-        <img id="img-maquina" src="" alt="Máquina do dia">
+        <div class="img-container">
+            <img id="image" src="" alt="Veículo de hoje">
+        </div>
     </div>
 
-    <div class="guesses" id="guesses-container">
-        <!-- Tentativas aparecerão aqui -->
+    <div class="guesses" id="guesses-board">
+        <!-- As 6 linhas são geradas pelo JavaScript -->
     </div>
 
-    <div class="input-area" id="input-area">
-        <input type="text" id="palpite" placeholder="R$ 0,00" onkeyup="formatCurrency(this)">
-        <button onclick="fazerPalpite()">Chutar</button>
-    </div>
-
-    <div class="result-panel" id="result-panel">
-        <h2 id="result-title"></h2>
-        <p>Preço correto:</p>
-        <h1 style="color: var(--yellow);" id="preco-correto-display"></h1>
-        <button class="share-btn" onclick="compartilhar()">Compartilhar Resultado 🔗</button>
+    <div class="end-panel" id="end-panel">
+        <h2 class="end-title" id="end-title"></h2>
+        <p style="color: #888; margin: 0; font-size: 0.9rem;">O valor correto era:</p>
+        <div class="end-price" id="end-price"></div>
+        <div id="streak-info" style="color: #aaa; margin-bottom: 15px;">🔥 Sequência: <strong id="streak-count" style="color: var(--orange);">0</strong> dias</div>
+        <button class="share-btn" onclick="compartilhar()">Compartilhar 🔗</button>
     </div>
 </div>
 
 <script>
-    // 1. BANCO DE DADOS (Você só precisa preencher isso com antecedência)
+    // ---------------------------------------------------------
+    // 1. BANCO DE DADOS (SEU PAINEL DE ADMIN)
+    // ---------------------------------------------------------
     const bancoDeDias = [
-        {
-            dia: 1,
-            categoria: "🇺🇸 JOHN DEERE",
-            nome: "Trator 8320R 4x4",
-            ano: "2018",
-            detalhe: "6.500 horas de motor",
-            preco: 1250000,
-            imagem: "https://via.placeholder.com/600x400/222222/FF9800?text=Foto+do+Trator+Aqui"
+        { // DIA 0 (17/10/2026)
+            brand: "🚜 JOHN DEERE",
+            model: "Trator 8320R 4x4",
+            detail: "6.500 horas",
+            year: "2018",
+            price: 1250000,
+            image: "trator.jpg" // Exemplo após você fazer upload
+        },
+        { // DIA 1 (18/10/2026)
+            brand: "🏗️ JCB",
+            model: "Retroescavadeira 3CX",
+            detail: "Gabinada / 4x4",
+            year: "2021",
+            price: 380000,
+            image: "retro.jpg"
+        },
+        { // DIA 2 (19/10/2026)
+            brand: "🌾 CASE IH",
+            model: "Colheitadeira 2388",
+            detail: "Plataforma 30 pés",
+            year: "2008",
+            price: 550000,
+            image: "colheitadeira.jpg"
         }
-        // Para adicionar o dia 2, basta colocar uma vírgula acima e abrir novas chaves {}
     ];
 
-    // Lógica do jogo atual
-    const diaAtual = bancoDeDias[0]; // Em um jogo real, você selecionaria pelo dia do ano
+    // ---------------------------------------------------------
+    // 2. LÓGICA DE DATA
+    // ---------------------------------------------------------
+    const DATA_LANCAMENTO = new Date('2026-10-17T00:00:00'); 
+    
+    function getDiaIndex() {
+        const hoje = new Date();
+        hoje.setHours(0,0,0,0);
+        const diasPassados = Math.floor((hoje - DATA_LANCAMENTO) / (1000 * 60 * 60 * 24));
+        if (diasPassados < 0) return 0;
+        if (diasPassados >= bancoDeDias.length) return bancoDeDias.length - 1; 
+        return diasPassados;
+    }
+
+    const indexHoje = getDiaIndex();
+    const maquinaHoje = bancoDeDias[indexHoje];
+
+    // ---------------------------------------------------------
+    // 3. VARIÁVEIS DE JOGO
+    // ---------------------------------------------------------
+    const MAX_TENTATIVAS = 6;
     let tentativas = [];
-    const maxTentativas = 6;
     let jogoFinalizado = false;
+    let venceu = false;
 
-    // Inicializa a tela
-    document.getElementById('categoria').innerText = diaAtual.categoria;
-    document.getElementById('nome-maquina').innerText = diaAtual.nome;
-    document.getElementById('detalhe').innerText = diaAtual.detalhe;
-    document.getElementById('ano-maquina').innerText = diaAtual.ano;
-    document.getElementById('img-maquina').src = diaAtual.imagem;
+    document.getElementById('brand').innerText = maquinaHoje.brand;
+    document.getElementById('model').innerText = maquinaHoje.model;
+    document.getElementById('detail').innerText = maquinaHoje.detail;
+    document.getElementById('year').innerText = maquinaHoje.year;
+    document.getElementById('image').src = maquinaHoje.image;
 
-    function renderizarTentativas() {
-        const container = document.getElementById('guesses-container');
-        container.innerHTML = '';
+    // ---------------------------------------------------------
+    // 4. RENDERIZAÇÃO
+    // ---------------------------------------------------------
+    function renderBoard() {
+        const board = document.getElementById('guesses-board');
+        board.innerHTML = '';
         
-        for (let i = 0; i < maxTentativas; i++) {
-            const div = document.createElement('div');
-            div.className = 'guess-row';
+        for (let i = 0; i < MAX_TENTATIVAS; i++) {
+            const row = document.createElement('div');
+            row.className = 'row';
             
-            if (tentativas[i]) {
+            if (i < tentativas.length) {
                 const t = tentativas[i];
-                div.classList.add(t.cssClass);
-                div.innerHTML = `<span>${i + 1}/6 &nbsp; R$ ${t.valor.toLocaleString('pt-BR')}</span> <span>${t.icone} ${t.texto}</span>`;
+                row.innerHTML = `
+                    <span class="row-num">${i+1}/6</span>
+                    <span class="row-val">R$ ${t.valor.toLocaleString('pt-BR')}</span>
+                    <div class="row-hint ${t.cssClass}">${t.icone} ${t.texto}</div>
+                `;
+            } else if (i === tentativas.length && !jogoFinalizado) {
+                row.classList.add('active');
+                row.innerHTML = `
+                    <span class="row-num">${i+1}/6</span>
+                    <div class="input-wrapper">
+                        <span class="input-prefix">R$</span>
+                        <input type="text" class="guess-input" id="input-palpite" placeholder="0" onkeyup="formatCurrency(this)" inputmode="numeric" autofocus>
+                        <button class="submit-btn" onclick="fazerPalpite()">→</button>
+                    </div>
+                `;
+                setTimeout(() => {
+                    const input = document.getElementById('input-palpite');
+                    if(input) input.addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter') fazerPalpite();
+                    });
+                }, 50);
             } else {
-                div.innerHTML = `<span style="color: #555;">${i + 1}/6 &nbsp; ---</span>`;
+                row.innerHTML = `<span class="row-num" style="color: #444;">${i+1}/6</span><span style="color: #444;">—</span>`;
             }
-            container.appendChild(div);
+            board.appendChild(row);
         }
     }
 
-    function calcularDiferenca(palpite, alvo) {
-        const diffAbsoluta = Math.abs(palpite - alvo);
-        const diffPercentual = diffAbsoluta / alvo;
-        const direcao = palpite > alvo ? '⏬' : '⏫';
-        
-        if (diffPercentual <= 0.04) return { cssClass: 'c-green', icone: '✅', texto: 'acertou!', corEmoji: '🟩', isWin: true };
-        if (diffPercentual <= 0.15) return { cssClass: 'c-yellow', icone: direcao, texto: palpite > alvo ? 'mais barato' : 'mais caro', corEmoji: '🟨', isWin: false };
-        if (diffPercentual <= 0.25) return { cssClass: 'c-orange', icone: direcao, texto: palpite > alvo ? 'muito mais barato' : 'muito mais caro', corEmoji: '🟧', isWin: false };
-        return { cssClass: 'c-red', icone: direcao, texto: palpite > alvo ? 'absurdamente mais barato' : 'absurdamente mais caro', corEmoji: '🟥', isWin: false };
+    // ---------------------------------------------------------
+    // 5. LÓGICA DE PALPITE E FORMATAÇÃO (Ajustado)
+    // ---------------------------------------------------------
+    function formatCurrency(input) {
+        let value = input.value.replace(/\D/g, '');
+        if(value === '') { input.value = ''; return; }
+        // Remove a divisão por 100 para aceitar apenas inteiros
+        input.value = parseInt(value).toLocaleString('pt-BR');
     }
 
     function fazerPalpite() {
-        if (jogoFinalizado || tentativas.length >= maxTentativas) return;
+        const inputStr = document.getElementById('input-palpite').value.replace(/\D/g, '');
+        if (!inputStr || inputStr === '0') return;
+        
+        const valorPalpite = parseInt(inputStr); // Agora pega o valor inteiro direto
+        const alvo = maquinaHoje.price;
+        
+        const diffAbsoluta = Math.abs(valorPalpite - alvo);
+        const diffPercentual = diffAbsoluta / alvo;
+        const direcao = valorPalpite > alvo ? '⏬' : '⏫';
+        
+        let resultado = {};
+        if (diffPercentual <= 0.04) {
+            resultado = { cssClass: 'c-green', icone: '✅', texto: 'acertou', emoji: '🟩', win: true };
+            venceu = true;
+            jogoFinalizado = true;
+        } else if (diffPercentual <= 0.15) {
+            resultado = { cssClass: 'c-yellow', icone: direcao, texto: valorPalpite > alvo ? 'mais barato' : 'mais caro', emoji: '🟨', win: false };
+        } else if (diffPercentual <= 0.25) {
+            resultado = { cssClass: 'c-orange', icone: direcao, texto: valorPalpite > alvo ? 'muito mais barato' : 'muito mais caro', emoji: '🟧', win: false };
+        } else {
+            resultado = { cssClass: 'c-red', icone: direcao, texto: valorPalpite > alvo ? 'absurdamente mais barato' : 'absurdamente mais caro', emoji: '🟥', win: false };
+        }
 
-        const inputStr = document.getElementById('palpite').value.replace(/\D/g, '');
-        if (!inputStr) return;
-        
-        const valorPalpite = parseInt(inputStr) / 100;
-        const resultado = calcularDiferenca(valorPalpite, diaAtual.preco);
-        
         tentativas.push({ valor: valorPalpite, ...resultado });
-        document.getElementById('palpite').value = '';
         
-        renderizarTentativas();
+        if (tentativas.length === MAX_TENTATIVAS && !venceu) {
+            jogoFinalizado = true;
+        }
 
-        if (resultado.isWin) {
-            finalizarJogo(true);
-        } else if (tentativas.length === maxTentativas) {
-            finalizarJogo(false);
+        renderBoard();
+
+        if (jogoFinalizado) {
+            finalizarDia();
         }
     }
 
-    function finalizarJogo(venceu) {
-        jogoFinalizado = true;
-        document.getElementById('input-area').style.display = 'none';
-        const panel = document.getElementById('result-panel');
-        panel.style.display = 'block';
+    function finalizarDia() {
+        const panel = document.getElementById('end-panel');
+        const title = document.getElementById('end-title');
+        const price = document.getElementById('end-price');
         
-        document.getElementById('result-title').innerText = venceu ? "MÁQUINA ARREMATADA!" : "NÃO FOI DESSA VEZ!";
-        document.getElementById('result-title').style.color = venceu ? "var(--green)" : "var(--red)";
-        document.getElementById('preco-correto-display').innerText = `R$ ${diaAtual.preco.toLocaleString('pt-BR')}`;
+        panel.style.display = 'block';
+        price.innerText = `R$ ${maquinaHoje.price.toLocaleString('pt-BR')}`;
+        
+        if (venceu) {
+            title.innerText = "MÁQUINA ARREMATADA!";
+            title.style.color = "var(--green)";
+        } else {
+            title.innerText = "NÃO FOI DESSA VEZ!";
+            title.style.color = "var(--red)";
+        }
+
+        atualizarStreak();
     }
 
-    function formatCurrency(input) {
-        let value = input.value.replace(/\D/g, '');
-        value = (value / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        input.value = value === 'R$ 0,00' ? '' : value;
+    function atualizarStreak() {
+        let streak = parseInt(localStorage.getItem('maquinadle_streak')) || 0;
+        let lastDayPlayed = parseInt(localStorage.getItem('maquinadle_lastDay')) || -1;
+
+        if (lastDayPlayed !== indexHoje) {
+            if (venceu) {
+                if (lastDayPlayed === indexHoje - 1) { streak += 1; } 
+                else { streak = 1; }
+            } else {
+                streak = 0; 
+            }
+            localStorage.setItem('maquinadle_streak', streak);
+            localStorage.setItem('maquinadle_lastDay', indexHoje);
+        }
+        
+        document.getElementById('streak-count').innerText = streak;
     }
 
     function compartilhar() {
-        let texto = `Joguei Maquinadle #${diaAtual.dia} ${tentativas[tentativas.length - 1].isWin ? tentativas.length : 'X'}/${maxTentativas} \n\n`;
+        let streak = localStorage.getItem('maquinadle_streak') || 0;
+        let texto = `Joguei Maquinadle #${indexHoje + 1} ${venceu ? tentativas.length : 'X'}/6 🔥${streak}\n\n`;
+        
         tentativas.forEach(t => {
-            texto += `${t.icone !== '✅' ? t.icone : ''}${t.corEmoji}\n`;
+            texto += `${t.icone !== '✅' ? t.icone : ''}${t.emoji}\n`;
         });
-        texto += `\nJogue em: maquinadle.com`; // Troque pelo seu link real depois
+        texto += `\nJogue em: maquinadle.com.br`; // Substitua pelo seu .online ou .com.br depois
 
         navigator.clipboard.writeText(texto).then(() => {
-            alert('Copiado para a área de transferência! É só colar no WhatsApp.');
+            alert('Copiado para a área de transferência! É só colar no grupo.');
         });
     }
 
-    // Inicia a tela vazia
-    renderizarTentativas();
+    renderBoard();
 </script>
 
 </body>
