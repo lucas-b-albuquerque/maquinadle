@@ -311,11 +311,25 @@
         tentativas.forEach(t => {
             texto += `${t.icone !== '✅' ? t.icone : ''}${t.emoji}\n`;
         });
-        texto += `\nJogue em: maquinadle.com.br`; // Substitua pelo seu .online ou .com.br depois
+        texto += `\nJogue em: maquinadle.com.br`;
 
-        navigator.clipboard.writeText(texto).then(() => {
-            alert('Copiado para a área de transferência! É só colar no grupo.');
-        });
+        // Tenta abrir a gaveta nativa de compartilhamento do celular (com WhatsApp)
+        if (navigator.share) {
+            navigator.share({
+                title: 'Maquinadle',
+                text: texto
+            }).catch(console.error);
+        } else {
+            // Fallback para quem estiver no PC (Copia e sugere abrir o WhatsApp Web)
+            navigator.clipboard.writeText(texto).then(() => {
+                let irProZap = confirm('Resultado copiado com sucesso!\n\nDeseja abrir o WhatsApp agora para colar no grupo?');
+                if (irProZap) {
+                    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(texto)}`, '_blank');
+                }
+            }).catch(() => {
+                alert('Aguarde o cadeado de segurança (HTTPS) do site ativar para usar a cópia automática.');
+            });
+        }
     }
 
     renderBoard();
