@@ -438,7 +438,7 @@
         let diaDoJogo = indexHoje + 1;
         let numTentativas = venceu ? tentativas.length : 'X';
         
-        let texto = `*MAQUINADLE ${diaDoJogo}*\n[${numTentativas}/6] 🔥${streak}\n\n`;
+        let texto = `*MAQUINADLE #${diaDoJogo}*\n[${numTentativas}/6] 🔥${streak}\n\n`;
         
         tentativas.forEach(t => {
             texto += `${t.icone !== '✅' ? t.icone : ''}${t.emoji}\n`;
