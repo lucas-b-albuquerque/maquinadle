@@ -3,66 +3,77 @@
 <head>
     <meta charset="UTF-8">
     
-    <!-- TAGS ANTI-CACHE (Dizem para o celular sempre baixar a versão nova) -->
+    <!-- TAGS ANTI-CACHE -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Maquinadle</title>
+    <title>Maquinadle - Adivinhe o preço da máquina</title>
+
+    <!-- Prévia bonita para links compartilhados no WhatsApp -->
+    <meta property="og:title" content="Maquinadle 🚜">
+    <meta property="og:description" content="Consegue acertar o valor da máquina pesada de hoje em até 6 tentativas?">
+    <meta property="og:url" content="https://maquinadle.com.br">
+    <meta property="og:type" content="website">
+
     <style>
-        /* O resto do código continua igual daqui pra baixo... */
         :root {
             --bg: #121213; --bg-card: #1e1e1e; --bg-row: #1a1a1b; --text: #ffffff;
             --gold: #fbc02d; --gold-hover: #f9a825; --border: #333;
             --green: #4caf50; --red: #f44336; --orange: #ff9800; --yellow: #ffeb3b;
         }
+        * { box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg); color: var(--text);
             margin: 0; padding: 15px; display: flex; justify-content: center;
         }
-        .container { max-width: 450px; width: 100%; }
+        .container { max-width: 450px; width: 100%; padding-bottom: 30px; }
         
         /* Header */
         .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 20px; }
         .header h1 { margin: 0; font-size: 1.5rem; letter-spacing: 1px; font-weight: 800; }
         .header h1 span { color: var(--gold); }
-        .stats-icons { display: flex; gap: 10px; color: #888; font-size: 1.2rem; }
+        .header-actions { display: flex; align-items: center; gap: 10px; }
+        .streak-badge { background: var(--bg-card); border: 1px solid var(--border); padding: 5px 10px; border-radius: 6px; font-size: 0.9rem; font-weight: bold; color: var(--orange); }
+        .help-btn { background: var(--bg-card); border: 1px solid var(--border); color: #ccc; width: 32px; height: 32px; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+        .help-btn:hover { border-color: var(--gold); color: white; }
         
         /* Machine Card */
         .card { background-color: var(--bg-card); border-radius: 8px; padding: 15px; margin-bottom: 20px; border: 1px solid var(--border); }
-        .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
-        .brand { font-size: 0.8rem; font-weight: bold; color: var(--orange); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
-        .model { font-size: 1.3rem; font-weight: bold; margin: 0; }
-        .detail { font-size: 0.75rem; color: #aaa; text-transform: uppercase; margin-top: 3px; }
-        .year-box { text-align: right; }
+        .edition-tag { font-size: 0.7rem; color: #777; letter-spacing: 1.5px; font-weight: bold; margin-bottom: 8px; text-transform: uppercase; }
+        .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; gap: 10px; }
+        .brand { font-size: 0.8rem; font-weight: bold; color: var(--orange); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+        .model { font-size: 1.25rem; font-weight: bold; margin: 0; line-height: 1.2; }
+        .detail { font-size: 0.75rem; color: #aaa; text-transform: uppercase; margin-top: 4px; }
+        .year-box { text-align: right; flex-shrink: 0; }
         .year-label { font-size: 0.7rem; color: #888; font-weight: bold; letter-spacing: 1px; }
         .year-val { font-size: 1.5rem; font-weight: bold; color: var(--gold); margin: 0; }
-        .img-container { width: 100%; border-radius: 6px; overflow: hidden; background: #000; display: flex; justify-content: center; }
-        .img-container img { width: 100%; height: auto; display: block; }
+        .img-container { width: 100%; border-radius: 6px; overflow: hidden; background: #000; display: flex; justify-content: center; min-height: 180px; align-items: center; }
+        .img-container img { width: 100%; height: auto; display: block; object-fit: cover; }
         
         /* Guesses Area */
         .guesses { display: flex; flex-direction: column; gap: 8px; }
-        .row { display: flex; justify-content: space-between; align-items: center; background: var(--bg-row); padding: 12px 15px; border-radius: 6px; border: 1px solid var(--border); height: 30px; font-weight: bold;}
-        .row.active { border-color: var(--gold); box-shadow: 0 0 5px rgba(251, 192, 45, 0.2); }
-        .row-num { color: #666; font-size: 0.9rem; width: 30px; }
+        .row { display: flex; justify-content: space-between; align-items: center; background: var(--bg-row); padding: 8px 14px; border-radius: 6px; border: 1px solid var(--border); min-height: 52px; font-weight: bold; gap: 8px; }
+        .row.active { border-color: var(--gold); box-shadow: 0 0 6px rgba(251, 192, 45, 0.2); }
+        .row-num { color: #666; font-size: 0.85rem; width: 28px; flex-shrink: 0; }
         
         /* Active Input Form */
-        .input-wrapper { display: flex; flex: 1; align-items: center; justify-content: space-between; }
-        .input-prefix { color: #888; margin-right: 5px; }
+        .input-wrapper { display: flex; flex: 1; align-items: center; justify-content: space-between; gap: 8px; }
+        .input-prefix { color: #888; font-size: 1rem; }
         .guess-input {
-            background: transparent; border: none; color: white; font-size: 1.1rem; font-weight: bold; width: 100%; outline: none;
+            background: transparent; border: none; color: white; font-size: 1.1rem; font-weight: bold; width: 100%; outline: none; padding: 4px 0;
         }
         .submit-btn {
-            background: var(--gold); color: #000; border: none; border-radius: 4px; width: 40px; height: 35px;
-            font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold;
+            background: var(--gold); color: #000; border: none; border-radius: 4px; width: 42px; height: 34px;
+            font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;
         }
         .submit-btn:active { background: var(--gold-hover); }
 
         /* Filled Row (Past Guess) */
-        .row-val { font-size: 1.1rem; color: white; flex: 1; text-align: left; margin-left: 10px; }
-        .row-hint { font-size: 0.85rem; border-radius: 4px; padding: 4px 10px; border: 1px solid var(--border); display: flex; align-items: center; gap: 5px; }
+        .row-val { font-size: 1.05rem; color: white; flex: 1; text-align: left; white-space: nowrap; }
+        .row-hint { font-size: 0.78rem; border-radius: 4px; padding: 4px 8px; border: 1px solid var(--border); display: flex; align-items: center; gap: 4px; white-space: nowrap; }
         
         /* Hint Colors */
         .c-red { color: #ffbaba; border-color: var(--red); background: rgba(244, 67, 54, 0.2); }
@@ -72,11 +83,22 @@
 
         /* End Game Panel */
         .end-panel { margin-top: 20px; background: var(--bg-card); padding: 20px; border-radius: 8px; border: 1px solid var(--border); text-align: center; display: none; }
-        .end-title { font-size: 1.5rem; font-weight: bold; margin: 0 0 10px 0; }
-        .end-price { font-size: 2rem; color: var(--gold); font-weight: bold; margin: 10px 0; }
+        .end-title { font-size: 1.4rem; font-weight: bold; margin: 0 0 10px 0; }
+        .end-price { font-size: 1.9rem; color: var(--gold); font-weight: bold; margin: 8px 0 15px 0; }
+        .next-timer { font-size: 0.85rem; color: #888; margin-top: 15px; border-top: 1px solid var(--border); padding-top: 12px; }
+        .next-timer strong { color: #ddd; font-family: monospace; font-size: 1rem; }
         .share-btn {
-            background: #333; color: white; border: 1px solid #555; border-radius: 6px; padding: 12px 20px; font-size: 1rem; cursor: pointer; font-weight: bold; margin-top: 15px; width: 100%; display: flex; justify-content: center; align-items: center; gap: 10px;
+            background: var(--gold); color: #000; border: none; border-radius: 6px; padding: 13px 20px; font-size: 1rem; cursor: pointer; font-weight: 800; margin-top: 10px; width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px;
         }
+        .share-btn:active { background: var(--gold-hover); }
+
+        /* Modal de Regras */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.75); display: none; justify-content: center; align-items: center; padding: 15px; z-index: 100; }
+        .modal { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; max-width: 400px; width: 100%; padding: 20px; position: relative; }
+        .modal h3 { margin-top: 0; color: var(--gold); }
+        .modal p { font-size: 0.9rem; color: #ccc; line-height: 1.4; }
+        .modal-close { position: absolute; top: 15px; right: 15px; background: none; border: none; color: #888; font-size: 1.2rem; cursor: pointer; }
+        .rule-list { list-style: none; padding: 0; font-size: 0.85rem; display: flex; flex-direction: column; gap: 8px; margin-top: 15px; }
     </style>
 </head>
 <body>
@@ -84,10 +106,14 @@
 <div class="container">
     <div class="header">
         <h1>MAQUINA<span>DLE</span></h1>
-        <div class="stats-icons">📅 🏆</div>
+        <div class="header-actions">
+            <div class="streak-badge" title="Sequência de vitórias">🔥 <span id="header-streak">0</span></div>
+            <button class="help-btn" onclick="abrirModal(true)" title="Como jogar">?</button>
+        </div>
     </div>
 
     <div class="card">
+        <div class="edition-tag" id="edition-tag">MAQUINADLE #1</div>
         <div class="card-top">
             <div>
                 <div class="brand" id="brand"></div>
@@ -112,8 +138,24 @@
         <h2 class="end-title" id="end-title"></h2>
         <p style="color: #888; margin: 0; font-size: 0.9rem;">O valor correto era:</p>
         <div class="end-price" id="end-price"></div>
-        <div id="streak-info" style="color: #aaa; margin-bottom: 15px;">🔥 Sequência: <strong id="streak-count" style="color: var(--orange);">0</strong> dias</div>
-        <button class="share-btn" onclick="compartilhar()">Compartilhar 🔗</button>
+        <div id="streak-info" style="color: #aaa; margin-bottom: 12px;">🔥 Sequência atual: <strong id="streak-count" style="color: var(--orange);">0</strong> dias</div>
+        <button class="share-btn" onclick="compartilhar()">Compartilhar Resultado 🔗</button>
+        <div class="next-timer">Próxima máquina em: <strong id="countdown">--:--:--</strong></div>
+    </div>
+</div>
+
+<!-- Modal Como Jogar -->
+<div class="modal-overlay" id="help-modal" onclick="abrirModal(false)">
+    <div class="modal" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="abrirModal(false)">✕</button>
+        <h3>Como Jogar</h3>
+        <p>Adivinhe o valor de mercado da máquina pesada em até <strong>6 tentativas</strong>. A cada chute, o jogo indica se o preço real é mais caro (⏫) ou mais barato (⏬):</p>
+        <ul class="rule-list">
+            <li><span class="row-hint c-green" style="display:inline-flex;">✅ Acertou</span> Dentro da margem de <strong>4%</strong> do valor.</li>
+            <li><span class="row-hint c-yellow" style="display:inline-flex;">🟨 Quente</span> Diferença entre <strong>4% e 15%</strong>.</li>
+            <li><span class="row-hint c-orange" style="display:inline-flex;">🟧 Morno</span> Diferença entre <strong>15% e 25%</strong>.</li>
+            <li><span class="row-hint c-red" style="display:inline-flex;">🟥 Frio</span> Diferença acima de <strong>25%</strong>.</li>
+        </ul>
     </div>
 </div>
 
@@ -128,7 +170,7 @@
             detail: "cabinado 7500 horas",
             year: "2018",
             price: 800000,
-            image: "dia1.jpg" // Exemplo após você fazer upload
+            image: "dia1.jpg"
         },
         { // DIA 2 (18/10/2026)
             brand: "🏗️ JCB",
@@ -166,18 +208,58 @@
     const maquinaHoje = bancoDeDias[indexHoje];
 
     // ---------------------------------------------------------
-    // 3. VARIÁVEIS DE JOGO
+    // 3. VARIÁVEIS DE JOGO E PERSISTÊNCIA DO DIA
     // ---------------------------------------------------------
     const MAX_TENTATIVAS = 6;
     let tentativas = [];
     let jogoFinalizado = false;
     let venceu = false;
 
+    // Preenche informações do veículo no topo
+    document.getElementById('edition-tag').innerText = `MAQUINADLE #${indexHoje + 1}`;
     document.getElementById('brand').innerText = maquinaHoje.brand;
     document.getElementById('model').innerText = maquinaHoje.model;
     document.getElementById('detail').innerText = maquinaHoje.detail;
     document.getElementById('year').innerText = maquinaHoje.year;
     document.getElementById('image').src = maquinaHoje.image;
+
+    function carregarEstadoDoDia() {
+        // Verifica se o jogador pulou mais de 1 dia para zerar o streak visualmente
+        let streakSalvo = parseInt(localStorage.getItem('maquinadle_streak'), 10) || 0;
+        let lastDayRaw = localStorage.getItem('maquinadle_lastDay');
+        let lastDayPlayed = lastDayRaw !== null ? parseInt(lastDayRaw, 10) : -1;
+
+        if (lastDayPlayed !== -1 && lastDayPlayed < indexHoje - 1) {
+            streakSalvo = 0;
+            localStorage.setItem('maquinadle_streak', 0);
+        }
+        document.getElementById('header-streak').innerText = streakSalvo;
+
+        // Recupera os chutes de hoje, se a pessoa já começou ou terminou de jogar hoje
+        try {
+            const estadoRaw = localStorage.getItem('maquinadle_estado_dia');
+            if (estadoRaw) {
+                const estado = JSON.parse(estadoRaw);
+                if (estado.dia === indexHoje) {
+                    tentativas = estado.tentativas || [];
+                    jogoFinalizado = estado.jogoFinalizado || false;
+                    venceu = estado.venceu || false;
+                }
+            }
+        } catch (e) {
+            console.error("Erro ao ler estado salvo:", e);
+        }
+    }
+
+    function salvarEstadoDoDia() {
+        const estado = {
+            dia: indexHoje,
+            tentativas: tentativas,
+            jogoFinalizado: jogoFinalizado,
+            venceu: venceu
+        };
+        localStorage.setItem('maquinadle_estado_dia', JSON.stringify(estado));
+    }
 
     // ---------------------------------------------------------
     // 4. RENDERIZAÇÃO
@@ -203,15 +285,18 @@
                     <span class="row-num">${i+1}/6</span>
                     <div class="input-wrapper">
                         <span class="input-prefix">R$</span>
-                        <input type="text" class="guess-input" id="input-palpite" placeholder="0" onkeyup="formatCurrency(this)" inputmode="numeric" autofocus>
+                        <input type="text" class="guess-input" id="input-palpite" placeholder="0" maxlength="11" oninput="formatCurrency(this)" inputmode="numeric" autofocus>
                         <button class="submit-btn" onclick="fazerPalpite()">→</button>
                     </div>
                 `;
                 setTimeout(() => {
                     const input = document.getElementById('input-palpite');
-                    if(input) input.addEventListener('keypress', function(e) {
-                        if (e.key === 'Enter') fazerPalpite();
-                    });
+                    if (input) {
+                        input.focus();
+                        input.addEventListener('keydown', function(e) {
+                            if (e.key === 'Enter') fazerPalpite();
+                        });
+                    }
                 }, 50);
             } else {
                 row.innerHTML = `<span class="row-num" style="color: #444;">${i+1}/6</span><span style="color: #444;">—</span>`;
@@ -221,20 +306,24 @@
     }
 
     // ---------------------------------------------------------
-    // 5. LÓGICA DE PALPITE E FORMATAÇÃO (Ajustado)
+    // 5. LÓGICA DE PALPITE E FORMATAÇÃO
     // ---------------------------------------------------------
     function formatCurrency(input) {
         let value = input.value.replace(/\D/g, '');
-        if(value === '') { input.value = ''; return; }
-        // Remove a divisão por 100 para aceitar apenas inteiros
-        input.value = parseInt(value).toLocaleString('pt-BR');
+        if (value === '') { input.value = ''; return; }
+        input.value = parseInt(value, 10).toLocaleString('pt-BR');
     }
 
     function fazerPalpite() {
-        const inputStr = document.getElementById('input-palpite').value.replace(/\D/g, '');
-        if (!inputStr || inputStr === '0') return;
+        if (jogoFinalizado) return;
+
+        const inputEl = document.getElementById('input-palpite');
+        if (!inputEl) return;
+
+        const inputStr = inputEl.value.replace(/\D/g, '');
+        if (!inputStr || parseInt(inputStr, 10) === 0) return;
         
-        const valorPalpite = parseInt(inputStr); // Agora pega o valor inteiro direto
+        const valorPalpite = parseInt(inputStr, 10);
         const alvo = maquinaHoje.price;
         
         const diffAbsoluta = Math.abs(valorPalpite - alvo);
@@ -260,14 +349,17 @@
             jogoFinalizado = true;
         }
 
+        // Salva no navegador imediatamente após cada chute
+        salvarEstadoDoDia();
         renderBoard();
 
         if (jogoFinalizado) {
-            finalizarDia();
+            atualizarStreak();
+            exibirPainelFinal(true);
         }
     }
 
-    function finalizarDia() {
+    function exibirPainelFinal(rolarTela) {
         const panel = document.getElementById('end-panel');
         const title = document.getElementById('end-title');
         const price = document.getElementById('end-price');
@@ -283,33 +375,69 @@
             title.style.color = "var(--red)";
         }
 
-        atualizarStreak();
+        let streakAtual = parseInt(localStorage.getItem('maquinadle_streak'), 10) || 0;
+        document.getElementById('streak-count').innerText = streakAtual;
+        document.getElementById('header-streak').innerText = streakAtual;
+
+        iniciarCronometro();
+
+        if (rolarTela) {
+            setTimeout(() => {
+                panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
     }
 
     function atualizarStreak() {
-        let streak = parseInt(localStorage.getItem('maquinadle_streak')) || 0;
-        let lastDayPlayed = parseInt(localStorage.getItem('maquinadle_lastDay')) || -1;
+        let streak = parseInt(localStorage.getItem('maquinadle_streak'), 10);
+        if (isNaN(streak)) streak = 0;
+
+        // Correção do bug do Dia 0: checa explicitamente se não é nulo
+        let lastDayRaw = localStorage.getItem('maquinadle_lastDay');
+        let lastDayPlayed = lastDayRaw !== null ? parseInt(lastDayRaw, 10) : -1;
 
         if (lastDayPlayed !== indexHoje) {
             if (venceu) {
-                if (lastDayPlayed === indexHoje - 1) { streak += 1; } 
-                else { streak = 1; }
+                if (lastDayPlayed === indexHoje - 1) {
+                    streak += 1;
+                } else {
+                    streak = 1;
+                }
             } else {
                 streak = 0; 
             }
             localStorage.setItem('maquinadle_streak', streak);
             localStorage.setItem('maquinadle_lastDay', indexHoje);
         }
-        
-        document.getElementById('streak-count').innerText = streak;
     }
 
-  function compartilhar() {
+    function iniciarCronometro() {
+        function atualizarRelogio() {
+            const agora = new Date();
+            const amanha = new Date(agora);
+            amanha.setHours(24, 0, 0, 0);
+            const diff = amanha - agora;
+
+            const h = String(Math.floor((diff / (1000 * 60 * 60)) % 24)).padStart(2, '0');
+            const m = String(Math.floor((diff / 1000 / 60) % 60)).padStart(2, '0');
+            const s = String(Math.floor((diff / 1000) % 60)).padStart(2, '0');
+
+            const el = document.getElementById('countdown');
+            if (el) el.innerText = `${h}:${m}:${s}`;
+        }
+        atualizarRelogio();
+        setInterval(atualizarRelogio, 1000);
+    }
+
+    function abrirModal(mostrar) {
+        document.getElementById('help-modal').style.display = mostrar ? 'flex' : 'none';
+    }
+
+    function compartilhar() {
         let streak = localStorage.getItem('maquinadle_streak') || 0;
         let diaDoJogo = indexHoje + 1;
         let numTentativas = venceu ? tentativas.length : 'X';
         
-        // Os asteriscos deixam o título em negrito no WhatsApp e evitam o bug de link nos números
         let texto = `*MAQUINADLE ${diaDoJogo}*\n[${numTentativas}/6] 🔥${streak}\n\n`;
         
         tentativas.forEach(t => {
@@ -317,13 +445,11 @@
         });
         texto += `\nmaquinadle.com.br`;
 
-        // Tenta abrir a gaveta nativa do celular (com WhatsApp, Insta, etc)
         if (navigator.share) {
             navigator.share({
                 text: texto
             }).catch(console.error);
         } else {
-            // Fallback para PC: Copia e pergunta se quer abrir o Zap Web
             navigator.clipboard.writeText(texto).then(() => {
                 let irProZap = confirm('Resultado copiado com sucesso!\n\nDeseja abrir o WhatsApp agora para colar no grupo?');
                 if (irProZap) {
@@ -335,10 +461,15 @@
         }
     }
 
+    // ---------------------------------------------------------
+    // 6. INICIALIZAÇÃO AO ABRIR O SITE
+    // ---------------------------------------------------------
+    carregarEstadoDoDia();
     renderBoard();
+    if (jogoFinalizado) {
+        exibirPainelFinal(false);
+    }
 </script>
 
 </body>
 </html>
-
-
