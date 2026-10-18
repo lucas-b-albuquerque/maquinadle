@@ -304,23 +304,26 @@
         document.getElementById('streak-count').innerText = streak;
     }
 
-    function compartilhar() {
+  function compartilhar() {
         let streak = localStorage.getItem('maquinadle_streak') || 0;
-        let texto = `Joguei Maquinadle #${indexHoje + 1} ${venceu ? tentativas.length : 'X'}/6 🔥${streak}\n\n`;
+        let diaDoJogo = indexHoje + 1;
+        let numTentativas = venceu ? tentativas.length : 'X';
+        
+        // Os asteriscos deixam o título em negrito no WhatsApp e evitam o bug de link nos números
+        let texto = `*MAQUINADLE ${diaDoJogo}*\n[${numTentativas}/6] 🔥${streak}\n\n`;
         
         tentativas.forEach(t => {
             texto += `${t.icone !== '✅' ? t.icone : ''}${t.emoji}\n`;
         });
-        texto += `\nJogue em: maquinadle.com.br`;
+        texto += `\nmaquinadle.com.br`;
 
-        // Tenta abrir a gaveta nativa de compartilhamento do celular (com WhatsApp)
+        // Tenta abrir a gaveta nativa do celular (com WhatsApp, Insta, etc)
         if (navigator.share) {
             navigator.share({
-                title: 'Maquinadle',
                 text: texto
             }).catch(console.error);
         } else {
-            // Fallback para quem estiver no PC (Copia e sugere abrir o WhatsApp Web)
+            // Fallback para PC: Copia e pergunta se quer abrir o Zap Web
             navigator.clipboard.writeText(texto).then(() => {
                 let irProZap = confirm('Resultado copiado com sucesso!\n\nDeseja abrir o WhatsApp agora para colar no grupo?');
                 if (irProZap) {
