@@ -332,15 +332,15 @@
         
         let resultado = {};
         if (diffPercentual <= 0.04) {
-            resultado = { cssClass: 'c-green', icone: '✅', texto: 'acertou', emoji: '🟩', win: true };
+            resultado = { cssClass: 'c-green', icone: '✅', texto: 'não fez mais que a obrigação', emoji: '🟩', win: true };
             venceu = true;
             jogoFinalizado = true;
         } else if (diffPercentual <= 0.15) {
-            resultado = { cssClass: 'c-yellow', icone: direcao, texto: valorPalpite > alvo ? 'mais barato' : 'mais caro', emoji: '🟨', win: false };
+            resultado = { cssClass: 'c-yellow', icone: direcao, texto: valorPalpite > alvo ? 'é mais barato' : 'é mais caro', emoji: '🟨', win: false };
         } else if (diffPercentual <= 0.25) {
-            resultado = { cssClass: 'c-orange', icone: direcao, texto: valorPalpite > alvo ? 'muito mais barato' : 'muito mais caro', emoji: '🟧', win: false };
+            resultado = { cssClass: 'c-orange', icone: direcao, texto: valorPalpite > alvo ? 'é muito mais barato' : 'é muito mais caro', emoji: '🟧', win: false };
         } else {
-            resultado = { cssClass: 'c-red', icone: direcao, texto: valorPalpite > alvo ? 'absurdamente mais barato' : 'absurdamente mais caro', emoji: '🟥', win: false };
+            resultado = { cssClass: 'c-red', icone: direcao, texto: valorPalpite > alvo ? 'abaixa MUITO esse preço' : 'sobe esse preço porra', emoji: '🟥', win: false };
         }
 
         tentativas.push({ valor: valorPalpite, ...resultado });
