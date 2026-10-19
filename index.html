@@ -446,23 +446,38 @@
         let diaDoJogo = indexHoje + 1;
         let numTentativas = venceu ? tentativas.length : 'X';
         
-        let texto = `*MAQUINADLE #${diaDoJogo}*\n[${numTentativas}/6] 🔥${streak}\n\n`;
+        let texto = `*MAQUINADLE ${diaDoJogo}*\n[${numTentativas}/6] 🔥${streak}\n\n`;
         
         tentativas.forEach(t => {
             texto += `${t.icone !== '✅' ? t.icone : ''}${t.emoji}\n`;
         });
         texto += `\nmaquinadle.com.br`;
 
-        if (navigator.share) {
+        // Detecta se o usuário está em um dispositivo móvel
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+        if (isMobile && navigator.share) {
+            // Se for celular, abre a gaveta nativa bonita do sistema
             navigator.share({
                 text: texto
             }).catch(console.error);
         } else {
+            // Se for PC (ou navegador sem suporte), copia direto para a área de transferência
             navigator.clipboard.writeText(texto).then(() => {
-                let irProZap = confirm('Resultado copiado com sucesso!\n\nDeseja abrir o WhatsApp agora para colar no grupo?');
-                if (irProZap) {
-                    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(texto)}`, '_blank');
-                }
+                // Feedback visual: Muda o botão temporariamente para verde
+                const btn = document.querySelector('.share-btn');
+                const textoOriginal = btn.innerHTML;
+                
+                btn.innerHTML = 'Copiado para o Ctrl+V! 📋';
+                btn.style.backgroundColor = 'var(--green)';
+                btn.style.color = '#fff';
+                
+                // Volta ao normal depois de 3 segundos
+                setTimeout(() => {
+                    btn.innerHTML = textoOriginal;
+                    btn.style.backgroundColor = 'var(--gold)';
+                    btn.style.color = '#000';
+                }, 3000);
             }).catch(() => {
                 alert('Aguarde o cadeado de segurança (HTTPS) do site ativar para usar a cópia automática.');
             });
