@@ -187,6 +187,14 @@
             year: "2003",
             price: 405000,
             image: "dia3.jpg"
+        },
+        { // DIA 4 (20/10/2026)
+            brand: "🚌 MARCOPOLO",
+            model: "PARADISO 1800 DD G8",
+            detail: "chassi Scania K450 200km",
+            year: "2023",
+            price: 2045000,
+            image: "dia4.jpg"
         }
     ];
 
@@ -332,7 +340,7 @@
         
         let resultado = {};
         if (diffPercentual <= 0.04) {
-            resultado = { cssClass: 'c-green', icone: '✅', texto: 'não fez mais que a obrigação', emoji: '🟩', win: true };
+            resultado = { cssClass: 'c-green', icone: '✅', texto: 'OK.', emoji: '🟩', win: true };
             venceu = true;
             jogoFinalizado = true;
         } else if (diffPercentual <= 0.15) {
