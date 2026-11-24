@@ -491,6 +491,126 @@
             year: "2019",
             price: 890000,
             image: "dia41.jpg"
+        },
+        { // DIA 42 (27/11/2026)
+            brand: "✈️ EMBRAER",
+            model: "Ipanema EMB-203 Agrícola",
+            detail: "Movido a Etanol / Hopper 950L / 0h",
+            year: "2025",
+            price: 2600000,
+            image: "dia42.jpg"
+        },
+        { // DIA 43 (28/11/2026)
+            brand: "🚛 BERCAMP",
+            model: "Carreta Cegonha CT 11 Carros",
+            detail: "Semirreboque Cegonheiro / 0km",
+            year: "2026",
+            price: 450000,
+            image: "dia43.jpg"
+        },
+        { // DIA 44 (29/11/2026)
+            brand: "🚢 TRANSPETRO",
+            model: "Navio Petroleiro Classe Handy",
+            detail: "18.000 TPB / 150 Metros / Novo",
+            year: "2026",
+            price: 410000000,
+            image: "dia44.jpg"
+        },
+        { // DIA 45 (30/11/2026)
+            brand: "🛡️ IVECO DEFENCE",
+            model: "VBTP-MR Guarani 6x6",
+            detail: "Blindado Anfíbio / 11 Militares / 0km",
+            year: "2026",
+            price: 3840000,
+            image: "dia45.jpg"
+        },
+        { // DIA 46 (01/12/2026)
+            brand: "🪨 EPIROC",
+            model: "Perfuratriz FlexiROC T40",
+            detail: "Perfuração de Rocha / 7.300 horas",
+            year: "2019",
+            price: 1000000,
+            image: "dia46.jpg"
+        },
+        { // DIA 47 (02/12/2026)
+            brand: "🚒 ROSENBAUER",
+            model: "Panther 6x6 Aeroportuário",
+            detail: "Bombeiro de Pista / 12.500L / 735 cv",
+            year: "2025",
+            price: 12000000,
+            image: "dia47.jpg"
+        },
+        { // DIA 48 (03/12/2026)
+            brand: "🚁 LEONARDO",
+            model: "Helicóptero AW139 Offshore",
+            detail: "Biturbina Óleo & Gás / 15 Lugares / 0h",
+            year: "2025",
+            price: 82000000,
+            image: "dia48.jpg"
+        },
+        { // DIA 49 (04/12/2026)
+            brand: "🌾 CASE IH",
+            model: "Colhedora de Cana A8810",
+            detail: "Austoft Esteira / 12.300 horas",
+            year: "2020",
+            price: 550000,
+            image: "dia49.jpg"
+        },
+        { // DIA 50 (05/12/2026)
+            brand: "🚢 VALEMAX",
+            model: "Supergraneleiro VLOC 400k",
+            detail: "362m / 400.000 Toneladas de Minério",
+            year: "2024",
+            price: 900000000,
+            image: "dia50.jpg"
+        },
+        { // DIA 51 (06/12/2026)
+            brand: "🏗️ XCMG",
+            model: "Guindaste Rodoviário QY100K",
+            detail: "100 Toneladas / 5 Eixos / 5.400 horas",
+            year: "2013",
+            price: 850000,
+            image: "dia51.jpg"
+        },
+        { // DIA 52 (07/12/2026)
+            brand: "🛡️ GENERAL DYNAMICS",
+            model: "Blindado M1126 Stryker DVHA1",
+            detail: "Transporte de Tropas 8x8 / 9 Soldados",
+            year: "2024",
+            price: 14000000,
+            image: "dia52.jpg"
+        },
+        { // DIA 53 (08/12/2026)
+            brand: "🪨 KOMATSU",
+            model: "Escavadeira de Mineração PC8000",
+            detail: "Ultra-Class 780 Ton / 2 Motores V16",
+            year: "2025",
+            price: 70000000,
+            image: "dia53.jpg"
+        },
+        { // DIA 54 (09/12/2026)
+            brand: "✈️ CESSNA",
+            model: "208B Grand Caravan EX",
+            detail: "Turboélice Carga/Utilitário / 50 horas",
+            year: "2025",
+            price: 25600000,
+            image: "dia54.jpg"
+        },
+        { // DIA 55 (10/12/2026)
+            brand: "🚛 GOLDHOFER",
+            model: "Carreta Extensível STZ-DL4",
+            detail: "4 Eixos Telescópica 56m / Pás Eólicas",
+            year: "2015",
+            price: 825000,
+            image: "dia55.jpg"
+        },
+        { // DIA 56 (11/12/2026)
+            brand: "🚢 MSC",
+            model: "Porta-Contêineres Classe Irina",
+            detail: "399,9m / Capacidade 24.346 Contêineres",
+            year: "2024",
+            price: 1180000000,
+            image: "dia56.jpg"
         }
     ];
 
@@ -589,7 +709,7 @@
                     <span class="row-num">${i+1}/6</span>
                     <div class="input-wrapper">
                         <span class="input-prefix">R$</span>
-                        <input type="text" class="guess-input" id="input-palpite" placeholder="0" maxlength="11" oninput="formatCurrency(this)" inputmode="numeric" autofocus>
+                        <input type="text" class="guess-input" id="input-palpite" placeholder="0" maxlength="16" oninput="formatCurrency(this)" inputmode="numeric" autofocus>
                         <button class="submit-btn" onclick="fazerPalpite()">→</button>
                     </div>
                 `;
